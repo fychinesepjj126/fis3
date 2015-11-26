@@ -81,10 +81,10 @@ fis.match('::packager', {
         resourceType: 'mod',
         useInlineMap: false,
         resoucemap: 'static/pkg/${filepath}_map.js',
-        include: [
+/*        include: [
           'modules/**.js',
           'widgets/**.js'
-        ]
+        ]*/
     }),
     packager: fis.plugin('map')
 })
