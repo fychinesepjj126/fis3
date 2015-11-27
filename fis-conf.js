@@ -31,6 +31,25 @@ fis.hook('commonjs', {
     mode: 'mod'
 });*/
 
+/*
+fis.match('static/js/**.js', {
+    isMod: true
+}).match('static/js/common/*.js', {
+    isMod: false
+}).match('modules/**',{
+    isMod: true,
+    useSameNameRequire: true,
+    release: 'static/$0'
+}).match(/^\/modules\/([^\/]+)\/\1\.(js)$/i, {
+    id: 'modules/$1'
+}).match('widgets/**', {
+    isMod: true,
+    useSameNameRequire: true,
+    release: 'static/$0'
+}).match(/^\/widgets\/([^\/]+)\/\1\.(js)$/i, {
+    id: 'widgets/$1'
+});
+*/
 
 fis.match('static/js/**.js', {
     isMod: true
@@ -51,18 +70,35 @@ fis.match('static/js/**.js', {
 });
 
 
-fis.match('static/tpl/(**).jade', {
+/*fis.match('static/tpl/(**.jade)', {
     isJsLike: true,
     parser: fis.plugin('jade-runtime'),
     rExt: '.js',
     isMod: true,
     wrap: false,
     id: '$1',
+    moduleId: '$1',
+    postprocessor: fis.plugin('jswrapper', {
+        wrap: '',
+        template : "define('${id}', function(require, exports, module) {module.exports=${content};})"
+    })
+});*/
+
+
+fis.match('({widgets,modules}/**.jade)', {
+    isJsLike: true,
+    parser: fis.plugin('jade-runtime'),
+    rExt: '.js',
+    isMod: true,
+    wrap: false,
+    id: '$1$2',
+    moduleId: '$1$2',
     postprocessor: fis.plugin('jswrapper', {
         wrap: '',
         template : "define('${id}', function(require, exports, module) {module.exports=${content};})"
     })
 })
+
 
 
 //page里的页面发布到根目录
@@ -79,7 +115,7 @@ async加载的是动态变量时，
 fis.match('::packager', {
     postpackager: fis.plugin('loader', {
         resourceType: 'mod',
-        useInlineMap: false,
+        useInlineMap: true,
         resoucemap: 'static/pkg/${filepath}_map.js',
 /*        include: [
           'modules/**.js',

@@ -18,29 +18,11 @@
     var autoRouter = Backbone.Router.extend({
         routes: {
             '': 'home',
-            'at/:module/:action(/*condition)': 'load'
+            'home': 'home'
         },
         home: function() {
-            this.load('modules', 'home', 'home');
-        },
-        // 按照at/module/action(/conditions)格式的請求自動加載模塊
-        load: function(target, moduleName, actionName, conditions) {
-            if(moduleName === actionName){
-                actionName = '';
-            }
-            // 将参数字符串'a:123/b:456'转换为json对象{a:123, b:456}
-            var param = {};
-            if(conditions && conditions.indexOf(':') > -1) {
-                conditions.replace(/(\w+)\s*:\s*([\w-]+)/g, function(matched, key, value) {
-                    key && (param[key] = value);
-                });
-            } else {
-                param = conditions;
-            }
-            // 加载module目录下对应的模块
-            var module_path = [target, moduleName, actionName].join('/');
-            module_path = _.trim(module_path, '/');
-            require([module_path], function(cb) {
+            var param = arguments;
+            require(['modules/home'], function(cb) {
                 if(cb) {
                     cb(param);
                 } else {
@@ -54,10 +36,12 @@
     exports.App = {
         Models: {},  
         Views: {},  
+        Events: {},
         Collections: {},
         initialize: function() {
-            new autoRouter();
+            var router = new autoRouter();
             Backbone.history.start();
+            //router.navigate("home", {trigger: true});
         }  
     };
 })(window);

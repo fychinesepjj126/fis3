@@ -1,5 +1,14 @@
-.header {
+#header {
     background: red;
-    height: 300px;
-    width: 400px;
+    margin: 0 auto;
+    width: 500px;
+}
+
+#header ul{font-size: 0;}
+
+#header ul li {
+    display: inline-block;
+    font-size: 16px;
+    line-height: 16px;
+    width: 100px;
 }
